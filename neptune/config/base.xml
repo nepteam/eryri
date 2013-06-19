@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <server>
+        <!-- Secret salt for secure-cookie feature -->
+        <secret></secret>
+        <!-- Uncomment below to enable custom error controller -->
+        <!-- <error>app.web.controller.ErrorController</error> -->
+    </server>
+    <routes>
+        <controller class="neptune.controller.Home" pattern="/"/>
+        <controller
+            class="neptune.security.controller.Authentication"
+            pattern="/login"
+            regexp="false"
+        />
+    </routes>
+</application>

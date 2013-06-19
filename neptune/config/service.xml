@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imagination>
+    <!-- See the documentation of Imagination at http://shiroyuki.com/work/project-imagination. -->
+    <!--
+    <entity id="css-compressor"
+            class="tori.service.data.compressor.CSSCompressor"
+            tags="resource-service-plugin"
+    />
+    -->
+    <entity id="db" class="tori.db.manager.Manager">
+        <param name="name" type="str">default</param>
+    </entity>
+</imagination>

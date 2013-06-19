@@ -1,0 +1,17 @@
+@mixin header {
+    font-weight: 200;
+}
+
+body {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+h1, h2 {
+    @include header;
+}
+
+.button {
+    font-weight: 300;
+    text-shadow: rgba(0, 0, 0, 0.2) 0 0 5px;
+    box-shadow: none;
+}

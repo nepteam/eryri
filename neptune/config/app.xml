@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <include src="base.xml"/> <!-- include from other configuration files -->
+    <server>
+        <debug>true</debug>
+        <port>8000</port>
+    </server>
+    <routes>
+        <resource
+            pattern="/vf/**"
+            location="static-vendors/foundation-4.2"
+            regexp="false"
+            cache="true"
+        />
+        <resource
+            pattern="/js/**"
+            location="resources/js"
+            regexp="false"
+            cache="false"
+        />
+        <resource
+            pattern="/css/**"
+            location="resources/css"
+            regexp="false"
+            cache="false"
+        />
+    </routes>
+    <service>service.xml</service>
+</application>
+
