@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <imagination>
     <entity
+        id="command.db"
+        class="neptune.command.Database"
+        tags="command command:db">
+        <param name="db" type="entity">db</param>
+        <interception before="me" do="execute" with="init"/>
+        <interception after="me" do="execute" with="clean_up"/>
+    </entity>
+    <entity
         id="command.user.create"
         class="neptune.security.command.UserCreator"
         tags="command command:user.create">
