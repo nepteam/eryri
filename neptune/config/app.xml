@@ -26,5 +26,6 @@
         />
     </routes>
     <service>service.xml</service>
+    <service>command.xml</service>
 </application>
 

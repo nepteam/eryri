@@ -10,4 +10,5 @@
     <entity id="db" class="tori.db.manager.Manager">
         <param name="name" type="str">default</param>
     </entity>
+    <entity id="service.password" class="neptune.security.service.PasswordService"/>
 </imagination>

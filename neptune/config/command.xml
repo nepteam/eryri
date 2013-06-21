@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imagination>
+    <entity
+        id="command.user.create"
+        class="neptune.security.command.UserCreator"
+        tags="command command:user.create">
+        <param name="db" type="entity">db</param>
+        <param name="password_service" type="entity">service.password</param>
+        <interception before="me" do="execute" with="init"/>
+        <interception after="me" do="execute" with="clean_up"/>
+    </entity>
+</imagination>

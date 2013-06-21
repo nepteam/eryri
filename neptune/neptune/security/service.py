@@ -4,7 +4,7 @@ import hashlib as h
 
 class PasswordService(object):
     FIRST_USABLE_ASCII_CODE = 33
-    USABLE_CHARACTER_COUNT  = 165 - FIRST_USABLE_ASCII_CODE
+    USABLE_CHARACTER_COUNT  = 127 - FIRST_USABLE_ASCII_CODE
 
     def random_int(self):
         return int(r.randint(0, 123456) * t.time())
