@@ -21,15 +21,19 @@ if len(sys.argv) == 1:
     for command_id in command_ids:
         # This is also a hack to get the entity (metadata) of the commands.
         entity = services._entities[command_id]
-        alias  = re.sub('^[^\.]+\.', '', command_id)
-        
-        if longest_cmd_length < len(alias):
-            longest_cmd_length = len(alias)
+        for tag in entity.tags:
+            if not re.search('^command:', tag):
+                continue
 
-        command_desc_map[alias] = entity._loader.package.__doc__.strip()
-    
+            alias  = re.sub('^[^:]+:', '', tag)
+
+            if longest_cmd_length < len(alias):
+                longest_cmd_length = len(alias)
+
+            command_desc_map[alias] = entity._loader.package.__doc__.strip()
+
     format_string = '  {:<%d}{}' % (longest_cmd_length + 4)
-    
+
     for id in command_desc_map:
         print(format_string.format(id, command_desc_map[id]))
 
