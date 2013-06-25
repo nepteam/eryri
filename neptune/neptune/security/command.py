@@ -18,6 +18,7 @@ class UserCreator(object):
         argument_parser.add_argument('-l', '--login', required=True)
         argument_parser.add_argument('-p', '--password', required=True)
         argument_parser.add_argument('-n', '--name', required=True)
+        argument_parser.add_argument('-r', '--roles', nargs='+', required=True)
 
     def execute(self, args):
         if not self._session:
@@ -37,7 +38,8 @@ class UserCreator(object):
             login    = args.login,
             password = self._ps.generate_hash(args.password, password_salt),
             salt     = password_salt,
-            name     = args.name
+            name     = args.name,
+            roles    = args.roles
         )
 
         credentials.persist(credential)

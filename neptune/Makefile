@@ -1,11 +1,16 @@
 default:
-	echo 'service_dev and scss_live'
+	@echo 'Static command for NEP Core'
+	@echo '  make service:  active the service'
+	@echo '  make css:      compile CSS from SCSS'
+	@echo '  make css_live: compile CSS from SCSS and update when a file is updated'
+	@echo
+	@echo 'For more options, run "./console".'
 
-service_dev:
-	python server.py
+service: scss_compile
+	@python server.py
 
-scss_compile:
-	sass --update resources/scss:resources/css
+css:
+	@sass --update resources/scss:resources/css --style compressed
 
-scss_live:
-	sass --watch resources/scss:resources/css
+css_live:
+	@sass --watch resources/scss:resources/css --style compressed

@@ -1,5 +1,5 @@
 class Database(object):
-    """ Command to create a new user
+    """ Command to manage the database
     """
     def __init__(self, db):
         self._db = db

@@ -7,6 +7,7 @@
             tags="resource-service-plugin"
     />
     -->
+    <entity id="session" class="tori.session.repository.xredis.Redis"/>
     <entity id="db" class="tori.db.manager.Manager">
         <param name="name" type="str">neptune</param>
     </entity>

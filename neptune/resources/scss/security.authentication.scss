@@ -1,5 +1,10 @@
 body {
     background-color: #eee;
+    background-image: url('http://farm9.staticflickr.com/8030/8041555619_b3996000bb_b_d.jpg');
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 form {
@@ -7,27 +12,18 @@ form {
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-top: -140px;
     margin-left: -140px;
+    margin-top: -90px;
     width: 280px;
-    height: 280px;
+    height: 180px;
 }
 
 .actions {
-    padding-top: 0px;
+    padding-top: 15px;
     padding-bottom: 0px;
 }
 
 .inputs {
     padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.feedback {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: 1px;
     border-bottom: 1px dashed #ccc;
 }

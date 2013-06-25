@@ -8,10 +8,14 @@
     </server>
     <routes>
         <controller class="neptune.controller.Home" pattern="/"/>
+        <controller class="neptune.controller.Dashboard" pattern="/home"/>
         <controller
             class="neptune.security.controller.Authentication"
             pattern="/login"
-            regexp="false"
+        />
+        <controller
+            class="neptune.security.controller.Deauthentication"
+            pattern="/logout"
         />
     </routes>
 </application>
