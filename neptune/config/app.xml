@@ -25,7 +25,7 @@
             cache="false"
         />
     </routes>
-    <service>service.xml</service>
     <service>command.xml</service>
+    <service>service.xml</service>
 </application>
 
