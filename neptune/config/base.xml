@@ -8,7 +8,7 @@
     </server>
     <routes>
         <controller class="neptune.controller.Home" pattern="/"/>
-        <controller class="neptune.controller.Dashboard" pattern="/home"/>
+        <controller class="neptune.controller.Dashboard" pattern="/dashboard"/>
         <controller
             class="neptune.security.controller.Authentication"
             pattern="/login"
@@ -16,6 +16,10 @@
         <controller
             class="neptune.security.controller.Deauthentication"
             pattern="/logout"
+        />
+        <controller
+            class="neptune.management.controller.Beacon"
+            pattern="/management/beacon"
         />
     </routes>
 </application>

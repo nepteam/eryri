@@ -6,7 +6,7 @@ default:
 	@echo
 	@echo 'For more options, run "./console".'
 
-service: scss_compile
+service: css
 	@python server.py
 
 css:

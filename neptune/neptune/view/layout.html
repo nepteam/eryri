@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8"/>
     <title>{% block htitle %}Nameless Education Platform{% endblock %}</title>
-    <script src="js/jquery.js"></script>
-    <script src="vf/js/foundation.min.js"></script>
-    <link rel="stylesheet" href="vf/css/foundation.min.css"/>
-    <link rel="stylesheet" href="css/hig.css"/>
+    <link rel="stylesheet" href="/vb/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/vb/css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" href="/css/hig.css"/>
     {% block css %}{% endblock %}
 </head>
 <body>
+    <div class="container">
     {% block content %}{% endblock %}
+    </div>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/vb/js/bootstrap.min.js"></script>
     {% block js %}{% endblock %}
 </body>
 </html>

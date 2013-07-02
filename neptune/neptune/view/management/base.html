@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
-{% block htitle %}Dashboard - {{ super() }}{% endblock %}
+{% block htitle %}Management - {{ super() }}{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="css/dashboard.css"/>
+<link rel="stylesheet" href="/css/dashboard.css"/>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -10,12 +10,13 @@
             <h1>{{ nep.user.name }}</h1>
         </article>
         <article class="mode">
-            <ul>
-                <li><a href="/management/beacon">Beacon</a></li>
-            </ul>
         </article>
     </div>
     <div class="span9">
+        <article class="primary">
+            <h1>{% block primary_title %}Management{% endblock %}</h1>
+            {% block primary_content %}{% endblock %}
+        </article>
     </div>
 </div>
 {% endblock %}

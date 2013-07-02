@@ -13,6 +13,18 @@
             cache="true"
         />
         <resource
+            pattern="/vb/**"
+            location="static-vendors/bootstrap"
+            regexp="false"
+            cache="true"
+        />
+        <resource
+            pattern="/image/**"
+            location="resources/image"
+            regexp="false"
+            cache="false"
+        />
+        <resource
             pattern="/js/**"
             location="resources/js"
             regexp="false"

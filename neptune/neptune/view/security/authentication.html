@@ -5,33 +5,23 @@
 {% endblock %}
 {% block content %}
 <form>
-    <div class="row inputs">
-        <div class="large-12 columns">
-            <input name="u" type="email" placeholder="Email address" class="large-12.columns"/>
-            <input name="p" type="password" placeholder="Password" class="large-12.columns"/>
-        </div>
+    <div class="inputs">
+        <input name="u" type="email" placeholder="Email address" class=""/>
+        <input name="p" type="password" placeholder="Password" class=""/>
     </div>
-    <div class="row actions">
-        <div class="large-12 columns">
-            <button class="button small expand">Login</button>
-        </div>
+    <div class="actions">
+        <button class="btn btn-primary">Login</button>
     </div>
 </form>
-<div id="feedback" class="reveal-modal medium">
-    <h2>Just so you know...</h2>
-    <p class="lead"></p>
-    <p class="support"></p>
-    <a class="close-reveal-modal">&#215;</a>
-</div>
 {% endblock %}
 {% block js %}
 <script>
 $(document).ready(function () {
-    var $form = $('form'),
-        $feedback = $('#feedback');
-
-    $feedback.find('.close-reveal-modal').on('click', function (e) {
-        $feedback.foundation('reveal', 'close');
+    var notifier = new Notifier('NEP Security'),
+        $form = $('form');
+    
+    $form.find('button').on('click', function () {
+        notifier.init();
     });
 
     $form.submit(function (e) {
@@ -47,19 +37,16 @@ $(document).ready(function () {
                 u: u,
                 p: p
             },
-            success: function (r) {
-                console.log(r);
+            success: function (user) {
+                notifier.notify('Welcome to the party, ' + user.name + '.');
+                history.go(0);
             },
             statusCode: {
                 400: function () {
-                    $feedback.find('.lead').html('Forgot to give the username or password');
-                    $feedback.find('.support').html('Please give the username or password and then try again.');
-                    $feedback.foundation('reveal', 'open');
+                    notifier.notify('Missing username or password');
                 },
                 403: function () {
-                    $feedback.find('.lead').html('Invalid username or password');
-                    $feedback.find('.support').html('Access denied for the given combination of username and password. Please try again.');
-                    $feedback.foundation('reveal', 'open');
+                    notifier.notify('Invalid username or password');
                 }
             }
         });
