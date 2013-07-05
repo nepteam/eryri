@@ -12,4 +12,26 @@
         <param name="name" type="str">neptune</param>
     </entity>
     <entity id="service.password" class="neptune.security.service.PasswordService"/>
+
+    <!-- management/service/AMQP -->
+    <!--
+    <entity id="pika.connection_credential" class="pika.credentials.PlainCredentials">
+        <param name="username" type="str">guest</param>
+        <param name="password" type="str">guest</param>
+    </entity>
+    -->
+    <entity id="pika.connection_parameters" class="pika.connection.URLParameters">
+        <param name="url" type="str">amqp://guest:guest@localhost:5672/%2f</param>
+        <!--
+        <param name="host" type="str">localhost</param>
+        <param name="credentials" type="entity">pika.connection_credential</param>
+        -->
+    </entity>
+    <entity id="amqp" class="neptune.management.service.AMQPManager">
+        <param name="parameters" type="entity">pika.connection_parameters</param>
+        <param name="default_queue" type="str">test_beacon</param>
+        <param name="default_queue_options" type="dict">
+            <item name="durable" type="bool">True</item>
+        </param>
+    </entity>
 </imagination>
