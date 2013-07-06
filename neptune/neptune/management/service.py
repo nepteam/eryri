@@ -1,6 +1,6 @@
 from pika.adapters.blocking_connection import BlockingConnection
 from pika.exceptions import ProbableAuthenticationError
-from threading import Thread, Lock
+from threading import Thread
 
 class AMQPAgent(Thread):
     def __init__(self, channel):
@@ -10,7 +10,6 @@ class AMQPAgent(Thread):
         self._queue   = None
         self._queue_options = {}
         self._kwargs  = {}
-        self._lock    = Lock()
 
     def set_queue(self, queue):
         self._queue = queue
@@ -19,24 +18,25 @@ class AMQPAgent(Thread):
         self._queue_options = options
 
 class Publisher(AMQPAgent):
-    def publish(self, **kwargs):
+    def publish(self, route, message, **kwargs):
         if not self._queue:
             raise RuntimeError('Queue is not defined.')
 
         self._kwargs = kwargs
+        
+        self._kwargs.update({
+            'routing_key': route,
+            'body':        message
+        })
+
+        if 'exchange' not in self._kwargs:
+            self._kwargs['exchange'] = ''
+
         self.start()
 
     def run(self):
-        self._lock.acquire()
-
-        if not self._channel.is_open:
-            self._channel.open()
-
         self._channel.queue_declare(queue=self._queue, **self._queue_options)
         self._channel.basic_publish(**self._kwargs)
-        self._channel.close()
-
-        self._lock.release()
 
 class Consumer(AMQPAgent):
     def consume(self, callback):
@@ -49,24 +49,16 @@ class Consumer(AMQPAgent):
         }
         self.start()
 
-    def close(self):
+    def abort(self):
         self._channel.stop_consuming()
-        self._channel.close()
 
     def run(self):
-        self._lock.acquire()
-
-        if not self._channel.is_open:
-            self._channel.open()
-
         def wrapper(channel, method, properties, body):
             pass
 
         self._channel.queue_declare(queue=self._queue, **self._queue_options)
         self._channel.basic_consume(**self._kwargs)
         self._channel.start_consuming()
-
-        self._lock.release()
 
 class AMQPManager(object):
     def __init__(self, parameters, connection_type=None, default_queue=None,
@@ -75,8 +67,6 @@ class AMQPManager(object):
         self._connection_type = connection_type or BlockingConnection
         self._connections     = {}
         self._channels        = {}
-        self._publishers      = {}
-        self._consumers       = {}
         self._default_queue   = default_queue
         self._default_queue_options = default_queue_options
 
@@ -111,19 +101,7 @@ class AMQPManager(object):
         return agent
 
     def publisher(self, id=None):
-        if not id:
-            return self.agent(id, Publisher)
-
-        if id not in self._publishers:
-            self._publishers[id] = self.agent(id, Publisher)
-
-        return self._publishers[id]
+        return self.agent(id, Publisher)
 
     def consumer(self, id=None):
-        if not id:
-            return self.agent(id, Consumer)
-
-        if id not in self._consumers:
-            self._consumers[id] = self.agent(id, Consumer)
-
-        return self._consumers[id]
+        return self.agent(id, Consumer)

@@ -1,3 +1,4 @@
+from hashlib import sha1
 from tori.db.entity import entity
 
 class WebAccessMode(object):
@@ -8,16 +9,22 @@ class WebAccessMode(object):
 class User(object):
     """ User data
     """
-    def __init__(self, email, name, roles=[]):
+    def __init__(self, alias, email, name, roles=[], api_token=None):
+        self.alias = alias
         self.email = email
         self.name  = name
         self.roles = roles
+        self.api_token = api_token
 
 @entity
 class Credential(object):
-    def __init__(self, login, password, salt, name, roles=[]):
+    def __init__(self, alias, login, password, salt, name, roles=[]):
+        self.alias = alias
         self.login = login
         self.password = password
         self.salt = salt
         self.name = name
         self.roles = roles
+
+    def api_token(self):
+        return sha1('{}{}'.format(self.salt, self.alias)).hexdigest()

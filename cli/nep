@@ -1,0 +1,260 @@
+#!/usr/bin/env python
+import argparse
+import codecs
+import getpass
+import json
+import os
+import sys
+
+from urllib import urlencode
+from urllib2 import HTTPError
+from urllib2 import Request
+from urllib2 import urlopen
+
+default_config = {
+    'common': {
+        'protocol': 'http',
+        'host':     '127.0.0.1',
+        'port':     '8000'
+    },
+    'setup': {
+        'auth_uri': '/login'
+    },
+    'beacon': {
+        'uri': '/api/beacon'
+    }
+}
+
+path_to_configuration = '{}/.nep'.format(os.getenv('HOME'))
+enabled_commands = [
+    'Beacon',
+    'Setup'
+]
+known_commands = {}
+
+def console(context, marker=None):
+    if not marker:
+        print('      {}'.format(context))
+        return
+
+    print('{} ... {}'.format(marker, context))
+
+def is_valid_answer(answer, expected_choices=[], default=None):
+    if default == None and not answer:
+        return False
+
+    if not expected_choices:
+        return True
+
+    return bool(answer.lower() in expected_choices)
+
+def prompt(message, expected_choices=[], default=None, is_password=False):
+    threshold = 2
+    message   = '? ... {}'.format(message)
+    message_pattern = '{} ({})'
+
+    if expected_choices:
+        message = message_pattern.format(message, '|'.join(expected_choices))
+
+    if default:
+        message = message_pattern.format(message, default)
+
+    message += ': '
+
+    if is_password:
+        return getpass.getpass(message)
+
+    try:
+        response = raw_input(message) or default
+
+        while not is_valid_answer(response, expected_choices, default) and threshold > 0:
+            threshold -= 1
+
+            if threshold:
+                console('Please try again.')
+            else:
+                console('This is your last attempt.')
+
+            response = raw_input(message) or default
+    except KeyboardInterrupt:
+        console('Cleanly exited', '\r\n!')
+        sys.exit(15)
+
+    if not is_valid_answer(response, expected_choices, default):
+        console('Your response is not valid.', 'E')
+        sys.exit(1)
+
+    if not response and default:
+        return default
+
+    return response
+
+def main():
+    parser     = argparse.ArgumentParser(description='NEP Agent')
+    subparsers = parser.add_subparsers()
+
+    for command_class_name in enabled_commands:
+        CommandClass = eval(command_class_name)
+        command      = CommandClass(default_config)
+
+        known_commands[command.name] = command
+
+        command_parser = subparsers.add_parser(
+            command.name,
+            description = command.description
+        )
+
+        command.define_arguments(command_parser)
+        command_parser.set_defaults(command = command)
+
+    cli = parser.parse_args()
+
+    try:
+        cli.command.check_precondition()
+        cli.command.load_configuration()
+        cli.command.handle(cli)
+        print('Done')
+    except RuntimeError as exception:
+        print('Error: {}'.format(exception.message))
+
+class Command(object):
+    RPC_VERSION = 'NEP/0.1'
+
+    def __init__(self, config):
+        self.config = dict(config)
+
+    @property
+    def name(self):
+        return self.__class__.__name__.lower()
+
+    @property
+    def description(self):
+        return self.__class__.__doc__.strip()
+
+    def check_precondition(self):
+        if not os.path.exists(path_to_configuration):
+            raise RuntimeError('Configuration not found. Run "nep setup" first.')
+
+    def load_configuration(self):
+        if not os.path.exists(path_to_configuration):
+            return
+
+        config = {}
+
+        with codecs.open(path_to_configuration, 'r') as fp:
+            data   = fp.read()
+
+            if data:
+                config = json.loads(data)
+
+        if not config:
+            return
+
+        self.config.update(config)
+
+    def url(self, path):
+        if path and path[0] == '/':
+            path = path[1:]
+
+        context = {
+            'protocol': self.config['common']['protocol'],
+            'host':     self.config['common']['host'],
+            'port':     self.config['common']['port'],
+            'path':     path
+        }
+
+        return '{protocol}://{host}:{port}/{path}'.format(**context)
+
+    def send(self, request):
+        request.add_header('X-Remote-Agent', self.RPC_VERSION)
+
+        code = None
+
+        try:
+            steam = urlopen(request)
+            code  = steam.getcode()
+        except HTTPError as exception:
+            code = exception.getcode()
+
+        if code in [401, 403]:
+            raise RuntimeError('(AUTH) Failed to authenticate the server.')
+        elif code == 400:
+            raise RuntimeError('(DATA) Data failed on validation.')
+        elif code >= 300:
+            raise RuntimeError('(HTTP-{}) Service is unreachable.'.format(code))
+
+        return steam
+
+class Setup(Command):
+    """ Local Setup for the Agent """
+    def define_arguments(self, parser):
+        pass
+
+    def handle(self, args):
+        attempts  = 2
+        auth_user = None
+
+        console('Configuring the RPC server', '-')
+
+        self.config['common'].update({
+            'host':     prompt('Host', default='127.0.0.1'),
+            'protocol': prompt('Protocol', ['http', 'https'], 'http'),
+            'port':     prompt('Port', default='8000')
+        })
+
+        console('Request for token', '-')
+
+        while not auth_user and attempts > 0:
+            attempts -= 1
+            data = {
+                'u': 'shiroyuki@gmail.com',#prompt('E-mail address'),
+                'p': 'iamgenius'#prompt('Password', is_password=True)
+            }
+
+            try:
+                request = Request(
+                    self.url(self.config['setup']['auth_uri']),
+                    urlencode(data)
+                )
+
+                response  = self.send(request)
+                auth_user = json.loads(response.read())
+                break
+            except RuntimeError as exception:
+                if '(AUTH)' not in exception.message and '(DATA)' not in exception.message:
+                    raise exception
+
+        if not attempts and not auth_user:
+            raise RuntimeError('Failed to authenticate the credential.')
+
+        self.config.update({
+            'user': auth_user
+        })
+
+        with codecs.open(path_to_configuration, 'w') as fp:
+            json.dump(self.config, fp)
+
+    def check_precondition(self):
+        pass
+
+class Beacon(Command):
+    """ Beacon Agent """
+    def define_arguments(self, parser):
+        parser.add_argument('message', help='Message')
+        parser.add_argument('-t', '--type', required=False, help='Type of Message')
+
+    def handle(self, args):
+        headers = {
+            'X-Agent-User':  self.config['user']['email'],
+            'X-Agent-Token': self.config['user']['api']['token']
+        }
+
+        data = {
+            'type': args.type,
+            'body': args.message
+        }
+
+        request  = Request(self.url(self.config['beacon']['uri']), json.dumps(data), headers)
+        response = self.send(request)
+
+main()

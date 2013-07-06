@@ -15,6 +15,7 @@ class UserCreator(object):
         del self._session
 
     def define_arguments(self, argument_parser):
+        argument_parser.add_argument('-u', '--username', required=True)
         argument_parser.add_argument('-l', '--login', required=True)
         argument_parser.add_argument('-p', '--password', required=True)
         argument_parser.add_argument('-n', '--name', required=True)
@@ -35,6 +36,7 @@ class UserCreator(object):
 
         password_salt = self._ps.generate_salt()
         credential    = credentials.new(
+            alias    = args.username,
             login    = args.login,
             password = self._ps.generate_hash(args.password, password_salt),
             salt     = password_salt,

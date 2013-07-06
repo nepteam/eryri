@@ -1,4 +1,7 @@
 {
     "name": "{{ user.name }}",
-    "email": "{{ user.email }}"
+    "email": "{{ user.email }}",
+    "api": {
+        "token": "{{ user.api_token }}"
+    }
 }

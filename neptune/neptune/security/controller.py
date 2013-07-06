@@ -17,7 +17,6 @@ class Authentication(Controller):
     def get(self):
         self.render('security/authentication.html')
 
-    @restricted_to_xhr_only
     @access_control(WebAccessMode.ONLY_ANONYMOUS_ACCESS)
     def post(self):
         login    = self.get_argument('u', None)
@@ -47,9 +46,11 @@ class Authentication(Controller):
             self.set_status(403)
 
         user = User(
+            alias = credential.alias,
             email = credential.login,
             name  = credential.name,
-            roles = credential.roles
+            roles = credential.roles,
+            api_token = credential.api_token()
         )
 
         self.session.set('user', user)
