@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="css/security.authentication.css"/>
 {% endblock %}
 {% block content %}
+<a style="display: none;" class="notification-trigger"></a>
 <form>
     <div class="inputs">
         <input name="u" type="email" placeholder="Email address" class=""/>
@@ -19,10 +20,12 @@
 $(document).ready(function () {
     var notifier = new Notifier('NEP Security'),
         $form = $('form');
-    
-    $form.find('button').on('click', function () {
+
+    $('.notification-trigger').on('click', function () {
         notifier.init();
     });
+
+    $('.notification-trigger').trigger('click');
 
     $form.submit(function (e) {
         e.preventDefault();
