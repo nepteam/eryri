@@ -29,7 +29,7 @@
     </entity>
     <entity id="amqp" class="neptune.management.service.AMQPManager">
         <param name="parameters" type="entity">pika.connection_parameters</param>
-        <param name="default_queue" type="str">test_beacon</param>
+        <param name="default_queue" type="str">central_beacon</param>
         <param name="default_queue_options" type="dict">
             <item name="durable" type="bool">True</item>
         </param>

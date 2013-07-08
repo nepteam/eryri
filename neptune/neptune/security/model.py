@@ -9,7 +9,8 @@ class WebAccessMode(object):
 class User(object):
     """ User data
     """
-    def __init__(self, alias, email, name, roles=[], api_token=None):
+    def __init__(self, id, alias, email, name, roles=[], api_token=None):
+        self.id = id
         self.alias = alias
         self.email = email
         self.name  = name

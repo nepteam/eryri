@@ -25,5 +25,9 @@
             class="neptune.management.controller.BeaconAPI"
             pattern="/api/beacon"
         />
+        <controller
+            class="neptune.management.controller.BeaconSocket"
+            pattern="/ws/beacon"
+        />
     </routes>
 </application>

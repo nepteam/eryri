@@ -1,3 +1,31 @@
 {% extends 'management/base.html' %}
+{% block css %}
+<link rel="stylesheet" href="/css/management.beacon.css"/>
+{{ super() }}
+{% endblock %}
 {% block primary_title %}Beacon{% endblock %}
-{% block primary_content %}{% endblock %}
+{% block primary_content %}
+<ul class="beacon messages"></ul>
+{% endblock %}
+{% block js %}
+<script src="/js/management.beacon.js"></script>
+<script>
+$(document).ready(function () {
+    var notifier  = new Notifier('Beacon'),
+        bmm = new BeaconMessageManager($('.beacon.messages')),
+        ws = new WebSocket('ws://{{ nep.request.host }}/ws/beacon');
+
+    ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+
+        data.message = JSON.parse(data.message);
+
+        bmm.load();
+        notifier.notify(data.message.body);
+    }
+
+    // Initialization
+    bmm.load();
+});
+</script>
+{% endblock %}

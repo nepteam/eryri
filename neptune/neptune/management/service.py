@@ -18,14 +18,15 @@ class AMQPAgent(Thread):
         self._queue_options = options
 
 class Publisher(AMQPAgent):
-    def publish(self, route, message, **kwargs):
+    def publish(self, message, route=None, **kwargs):
         if not self._queue:
             raise RuntimeError('Queue is not defined.')
 
         self._kwargs = kwargs
-        
+        self._queue  = route or self._queue
+
         self._kwargs.update({
-            'routing_key': route,
+            'routing_key': route or self._queue,
             'body':        message
         })
 
@@ -44,18 +45,16 @@ class Consumer(AMQPAgent):
             raise RuntimeError('Queue is not defined.')
 
         self._kwargs = {
-            'queue':             queue,
+            'queue':             self._queue,
             'consumer_callback': callback
         }
+
         self.start()
 
     def abort(self):
         self._channel.stop_consuming()
 
     def run(self):
-        def wrapper(channel, method, properties, body):
-            pass
-
         self._channel.queue_declare(queue=self._queue, **self._queue_options)
         self._channel.basic_consume(**self._kwargs)
         self._channel.start_consuming()

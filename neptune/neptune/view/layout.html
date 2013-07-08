@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content = "width = device-width, initial-scale = 1.0, user-scalable = no" /> 
     <title>{% block htitle %}Nameless Education Platform{% endblock %}</title>
     <link rel="stylesheet" href="/vb/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/vb/css/bootstrap-responsive.min.css"/>
@@ -9,7 +10,7 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
     {% block content %}{% endblock %}
     </div>
     <script src="/js/jquery.js"></script>

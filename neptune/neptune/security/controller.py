@@ -1,6 +1,6 @@
 from neptune.common             import Controller
 from neptune.security.model     import Credential, WebAccessMode, User
-from neptune.security.decorator import access_control, restricted_to_xhr_only
+from neptune.security.decorator import access_control
 
 class Deauthentication(Controller):
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/login')
@@ -46,6 +46,7 @@ class Authentication(Controller):
             self.set_status(403)
 
         user = User(
+            id    = credential.id,
             alias = credential.alias,
             email = credential.login,
             name  = credential.name,
