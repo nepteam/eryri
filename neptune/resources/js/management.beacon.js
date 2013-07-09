@@ -5,7 +5,28 @@ BeaconMessageManager = function ($context) {
     this.loadedMap = {};
 
     setInterval($.proxy(this.updateAllTimestamps, this), 60000);
+
+    this.context.on(
+        'click',
+        '.message .delete',
+        $.proxy(this.onDelete, this)
+    );
 };
+
+BeaconMessageManager.prototype.onDelete = function(e) {
+    var self = this,
+        $button = $(e.currentTarget),
+        $container = $button.closest('.message');
+    e.preventDefault();
+
+    $.ajax({
+        url: '/api/beacon/' + $container.attr('data-id'),
+        type: 'delete',
+        success: function (data) {
+            self.load();
+        }
+    });
+}
 
 BeaconMessageManager.prototype.updateAllTimestamps = function () {
     var currentTimestamp = parseInt(new Date().getTime() / 1000, 10),
@@ -24,20 +45,27 @@ BeaconMessageManager.prototype.updateAllTimestamps = function () {
                 ? ''
                 : textTimestamp
         );
-        
+
         previousTimestamp = textTimestamp;
         previousType      = type;
     });
 }
 
 BeaconMessageManager.prototype.renderOne = function (message) {
-    var $message = $(document.createElement('li'));
+    var $message = $(document.createElement('li')),
+        $deleteButton = $(document.createElement('button'));
+
+    $deleteButton
+        .addClass('btn btn-danger delete')
+        .html('&times;');
 
     $message
+        .addClass('message')
         .attr('data-id', message.id)
         .attr('data-type', message.type)
         .attr('data-created', message.created)
-        .text(message.body);
+        .text(message.body)
+        .append($deleteButton);
 
     return $message;
 };

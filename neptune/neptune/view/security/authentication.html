@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="css/security.authentication.css"/>
 {% endblock %}
 {% block content %}
-<a style="display: none;" class="notification-trigger"></a>
 <form>
     <div class="inputs">
         <input name="u" type="email" placeholder="Email address" class=""/>
@@ -16,44 +15,5 @@
 </form>
 {% endblock %}
 {% block js %}
-<script>
-$(document).ready(function () {
-    var notifier = new Notifier('NEP Security'),
-        $form = $('form');
-
-    $('.notification-trigger').on('click', function () {
-        notifier.init();
-    });
-
-    $('.notification-trigger').trigger('click');
-
-    $form.submit(function (e) {
-        e.preventDefault();
-
-        var u = $form.find('input[name=u]').val(),
-            p = $form.find('input[name=p]').val();
-
-        $.ajax({
-            url: '/login',
-            method: 'post',
-            data: {
-                u: u,
-                p: p
-            },
-            success: function (user) {
-                notifier.notify('Welcome to the party, ' + user.name + '.');
-                history.go(0);
-            },
-            statusCode: {
-                400: function () {
-                    notifier.notify('Missing username or password');
-                },
-                403: function () {
-                    notifier.notify('Invalid username or password');
-                }
-            }
-        });
-    });
-});
-</script>
+<script src="/js/login.js"></script>
 {% endblock %}

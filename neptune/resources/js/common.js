@@ -20,24 +20,67 @@ function whenAgo(time, currentTime) {
 }
 
 Notifier = function (namespace) {
-    this.namespace       = namespace
-    this.hasNotification = true;
+    var $body = $('body'),
+        modalTemplate = [
+            '<div class="modal hide wizard notifier-setup">',
+            '<div class="modal-header"><h3>Notification Settings</h3></div>',
+            '<div class="modal-body">',
+            '<p>Do you want to use the desktop notification?</p>',
+            '</div>',
+            '<div class="modal-footer">',
+            '<button type="button" class="btn btn-primary notification-activator" data-type="desktop">OS Notification</button>',
+            '<button type="button" class="btn notification-activator" data-type="no">No</button>',
+            '</div>',
+            '</div>'
+        ].join('');
+
+    this.namespace       = namespace;
+    this.hasNotification = false;
+    this.dialog          = null;
+    this.activators      = null;
 
     if (window.webkitNotifications && window.Notification === undefined) {
         window.Notification = window.webkitNotifications;
     }
 
-    if (window.Notification === undefined) {
-        this.hasNotification = false;
+    if (window.Notification !== undefined) {
+        this.hasNotification = true;
+
+        $body.append(modalTemplate);
     }
+
+    localStorage.notification = this.hasNotification && localStorage.notification && localStorage.notification.length > 0
+        ? localStorage.notification
+        : '';
+
+    if (localStorage.notification.length === 0) {
+        this.dialog = $body.find('.wizard.notifier-setup');
+        this.dialog.modal('show');
+    }
+
+    this.activators = $body.find('.notification-activator');
+
+    this.activators.on('click', $.proxy(this.activateNotification, this));
 };
 
-Notifier.prototype.init = function () {
-    if (this.hasNotification) {
+Notifier.prototype.activateNotification = function (e) {
+    var $target = $(e.currentTarget),
+        type = $target.attr('data-type');
+
+    e.preventDefault();
+
+    if (!this.hasNotification || $target.attr('disabled')) {
         return;
     }
 
-    Notification.requestPermission();
+    localStorage.notification = type;
+
+    this.dialog.modal('hide');
+    this.activators.attr('disabled', true);
+
+    if (type === 'desktop') {
+        return Notification.requestPermission();
+    }
 };
 
 Notifier.prototype.notify = function (title, options) {

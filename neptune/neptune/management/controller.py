@@ -1,9 +1,10 @@
 import json
+import bson
 import pika
 import pymongo
 import time
 from tori.db.common import Serializer
-from neptune.common import Controller, WebSocket
+from neptune.common import Controller, WebSocket, RestController
 from neptune.management.model import BeaconMessage
 from neptune.security.decorator import access_control, restricted_to_xhr_only
 from neptune.security.model import Credential, WebAccessMode
@@ -11,6 +12,25 @@ from neptune.security.model import Credential, WebAccessMode
 class Beacon(Controller):
     def get(self):
         self.render('management/beacon.html')
+
+    def put(self):
+        """ Form marking all messages as read.
+        """
+        entity_manager = self.component('db')
+        session        = entity_manager.open_session()
+        collection     = session.repository(BeaconMessage)
+        criteria       = collection.new_criteria()
+
+        criteria.where('owner', self.user.id)
+        criteria.where('is_read', false)
+        criteria.order('created', pymongo.DESCENDING)
+
+        for message in collection.find(criteria):
+            message.is_read = True
+
+            session.persist(message)
+
+        session.flush()
 
 class BeaconSocket(WebSocket):
     consumer = None
@@ -36,12 +56,12 @@ class BeaconSocket(WebSocket):
     def close(self):
         self.consumer.abort()
 
-class BeaconAPI(Controller):
+class BeaconAPI(RestController):
     serializer = Serializer()
 
     @restricted_to_xhr_only
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/login')
-    def get(self):
+    def list(self):
         limit = int(self.get_argument('limit', None) or 25)
 
         entity_manager = self.component('db')
@@ -72,7 +92,7 @@ class BeaconAPI(Controller):
             'messages':     messages
         }))
 
-    def post(self):
+    def create(self):
         request = self.request
         email   = None
         token   = None
@@ -131,3 +151,17 @@ class BeaconAPI(Controller):
         session.flush()
 
         self.set_status(200)
+
+    def remove(self, id):
+        oid = bson.ObjectId(id)
+
+        entity_manager = self.component('db')
+        session        = entity_manager.open_session()
+        collection     = session.repository(BeaconMessage)
+        message        = collection.get(oid)
+
+        if not message:
+            return self.set_status(404)
+
+        session.delete(message)
+        session.flush()
