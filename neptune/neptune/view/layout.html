@@ -16,6 +16,16 @@
     <script src="/js/jquery.js"></script>
     <script src="/js/common.js"></script>
     <script src="/vb/js/bootstrap.min.js"></script>
-    {% block js %}{% endblock %}
+    {% block js %}
+        {% if nep.user %}
+            <script>wsUrl = 'ws://{{ nep.request.host }}/ws/beacon';</script>
+            <script src="/js/management.beacon.js"></script>
+            <script>
+                $(document).ready(function () {
+                    var uc = new UserCard();
+                });
+            </script>
+        {% endif %}
+    {% endblock %}
 </body>
 </html>

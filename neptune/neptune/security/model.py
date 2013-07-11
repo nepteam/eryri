@@ -1,4 +1,4 @@
-from hashlib import sha1
+from hashlib import sha1, md5
 from tori.db.entity import entity
 
 class WebAccessMode(object):
@@ -16,6 +16,9 @@ class User(object):
         self.name  = name
         self.roles = roles
         self.api_token = api_token
+
+    def gravatar(self):
+        return 'http://www.gravatar.com/avatar/{}'.format(md5(self.email).hexdigest())
 
 @entity
 class Credential(object):

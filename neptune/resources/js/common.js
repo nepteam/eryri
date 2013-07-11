@@ -1,4 +1,4 @@
-var Notifier;
+var Notifier, UserCard;
 
 function whenAgo(time, currentTime) {
     var diffInSecond = currentTime - time,
@@ -110,4 +110,21 @@ Notifier.prototype.notify = function (title, options) {
     n.onclick = function() {
         this.close();
     };
+};
+
+UserCard = function () {
+    this.context = $('.user');
+    
+    this.context.on('click', $.proxy(this.onExpand, this));
+    this.context.find('.hide-button').on('click', $.proxy(this.onHide, this));
+}
+
+UserCard.prototype.onExpand = function (e) {
+    this.context.removeClass('stand-by');
+};
+
+UserCard.prototype.onHide = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.context.addClass('stand-by');
 };

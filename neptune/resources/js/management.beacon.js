@@ -33,21 +33,25 @@ BeaconMessageManager.prototype.updateAllTimestamps = function () {
         previousTimestamp,
         previousType;
 
-    this.context.children('li').each(function (i) {
-        var $message  = $(this),
-            type      = $message.attr('data-type'),
-            timestamp = parseInt($message.attr('data-created'), 10),
-            textTimestamp = whenAgo(timestamp, currentTimestamp);
+    this.context.each(function (i) {
+        previousTimestamp = null;
+        previousType      = null;
+        $(this).children('li').each(function (j) {
+            var $message  = $(this),
+                type      = $message.attr('data-type'),
+                timestamp = parseInt($message.attr('data-created'), 10),
+                textTimestamp = whenAgo(timestamp, currentTimestamp);
 
-        $message.attr(
-            'data-when-ago',
-            textTimestamp === previousTimestamp && previousType === type
-                ? ''
-                : textTimestamp
-        );
+            $message.attr(
+                'data-when-ago',
+                textTimestamp === previousTimestamp && type === previousType
+                    ? ''
+                    : textTimestamp
+            );
 
-        previousTimestamp = textTimestamp;
-        previousType      = type;
+            previousTimestamp = textTimestamp;
+            previousType      = type;
+        });
     });
 }
 
@@ -92,3 +96,30 @@ BeaconMessageManager.prototype.load = function () {
         }
     });
 };
+
+$(document).ready(function () {
+    var notifier  = new Notifier('Beacon'),
+        $user = $('.user');
+        bmm = new BeaconMessageManager($('.beacon.messages')),
+        ws = new WebSocket(wsUrl);
+
+    ws.onopen = function (event) {
+        $user.addClass('online');
+    };
+
+    ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+
+        data.message = JSON.parse(data.message);
+
+        bmm.load();
+        notifier.notify(data.message.body);
+    };
+
+    ws.onclose = function (event) {
+        $user.removeClass('online');
+    };
+
+    // Initialization
+    bmm.load();
+});

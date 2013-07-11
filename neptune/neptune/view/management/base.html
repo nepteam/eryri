@@ -5,28 +5,25 @@
 {% endblock %}
 {% block content %}
 <div class="row-fluid">
-    <aside class="span3">
-        <article class="user">
-            <h1 title="{{ nep.user.name }}"><span>{{ nep.user.name[0] }}</span></h1>
-        </article>
-        <nav class="mode">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="/logout">Log Out</a></li>
-            </ul>
-        </nav>
-    </aside>
-    <div class="span9">
+    <div class="span12">
         <article class="primary">
             <h1>{% block primary_title %}Management{% endblock %}</h1>
             {% block primary_content %}{% endblock %}
         </article>
     </div>
 </div>
+<article class="user">
+    <div class="avatar"><img src="{{ nep.user.gravatar() }}?s=320" title="{{ nep.user.name }}"/></div>
+    <div class="name">{{ nep.user.name }}</div>
+    <nav class="mode">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="/logout">Log Out</a></li>
+        </ul>
+    </nav>
+    <ul class="beacon messages"></ul>
+    <a class="hide-button" title="Hide the user card">→</a>
+</article>
 {% endblock %}
 {% block js %}
-<script>
-$(document).ready(function () {
-
-});
-</script>
+{{ super() }}
 {% endblock %}
