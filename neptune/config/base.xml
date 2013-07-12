@@ -18,15 +18,15 @@
             pattern="/logout"
         />
         <controller
-            class="neptune.management.controller.Beacon"
-            pattern="/management/beacon"
+            class="neptune.beacon.controller.Beacon"
+            pattern="/beacon"
         />
         <controller
-            class="neptune.management.controller.BeaconAPI"
+            class="neptune.beacon.controller.BeaconAPI"
             pattern="/api/beacon/?"
         />
         <controller
-            class="neptune.management.controller.BeaconAPI"
+            class="neptune.beacon.controller.BeaconAPI"
             pattern="/api/beacon/*"
             regexp="false"
         />

@@ -5,13 +5,13 @@ import pymongo
 import time
 from tori.db.common import Serializer
 from neptune.common import Controller, WebSocket, RestController
-from neptune.management.model import BeaconMessage
+from neptune.beacon.model import BeaconMessage
 from neptune.security.decorator import access_control, restricted_to_xhr_only
 from neptune.security.model import Credential, WebAccessMode
 
 class Beacon(Controller):
     def get(self):
-        self.render('management/beacon.html')
+        self.render('beacon/beacon.html')
 
     def put(self):
         """ Form marking all messages as read.
@@ -62,20 +62,23 @@ class BeaconAPI(RestController):
     @restricted_to_xhr_only
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/login')
     def list(self):
+        accepted_at = time.time()
         limit = int(self.get_argument('limit', None) or 25)
 
         entity_manager = self.component('db')
         session        = entity_manager.open_session()
         collection     = session.repository(BeaconMessage)
-        criteria       = collection.new_criteria()
 
-        criteria.where('owner', self.user.id)
-        criteria.order('created', pymongo.DESCENDING)
-        criteria.limit(limit)
+        recent_criteria = self.__create_basic_criteria(collection, self.user)
+        recent_criteria.limit(limit)
+        
+        total_count_criteria  = self.__create_basic_criteria(collection, self.user)
+        unread_count_criteria = self.__create_basic_criteria(collection, self.user)
+        unread_count_criteria.where('is_read', False)
 
         messages = []
 
-        for message in collection.find(criteria):
+        for message in collection.find(recent_criteria):
             serialized_data = {
                 'id':   str(message.id),
                 'type': message.kind,
@@ -88,8 +91,13 @@ class BeaconAPI(RestController):
 
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps({
-            'current_time': time.time(),
-            'messages':     messages
+            'meta': {
+                'total_count':   collection.count(total_count_criteria),
+                'unread_count':  collection.count(unread_count_criteria),
+                'produced_time': time.time(),
+                'response_time': time.time() - accepted_at
+            },
+            'messages': messages
         }))
 
     def create(self):
@@ -165,3 +173,11 @@ class BeaconAPI(RestController):
 
         session.delete(message)
         session.flush()
+
+    def __create_basic_criteria(self, collection, user):
+        criteria = collection.new_criteria()
+
+        criteria.where('owner', user.id)
+        criteria.order('created', pymongo.DESCENDING)
+
+        return criteria

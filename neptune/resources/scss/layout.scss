@@ -24,6 +24,7 @@
         transition: all ease 250ms;
         overflow: hidden;
         height: 144px;
+
         img {
             transition: all ease 250ms;
             margin-top: -48px;
@@ -36,22 +37,40 @@
     .name {
         overflow: hidden;
         padding: 5px 10px;
+        background-color: #666;
+        color: #fff;
+        text-transform: uppercase;
     }
 
-    .beacon.messages {
-        font-size: 12px;
+    .mode {
+        .nav {
+            margin-bottom: 0;
+        }
+    }
 
-        li .btn.delete {
-            display: none;
-
-            &:hover {
-                display: none;
-            }
+    .beacon {
+        .count {
+            transition: all ease 1000ms;
+            top: 126px;
+            right: 5px;
+            position: absolute;
         }
 
-        li:before {
-            display: none;
-        };
+        .messages {
+            font-size: 12px;
+
+            li .btn.delete {
+                display: none;
+
+                &:hover {
+                    display: none;
+                }
+            }
+
+            li:before {
+                display: none;
+            };
+        }
     }
 
     &.stand-by {
@@ -64,6 +83,7 @@
         .avatar {
             overflow: visible;
             height: auto;
+
             img {
                 margin-top: 0;
                 border-radius: 80px;
@@ -78,12 +98,28 @@
             opacity: 0;
         }
 
-        .name, .mode, .beacon.messages {
+        .beacon {
+            .count {
+                top: 0;
+                right: 0;
+            }
+        }
+
+        .name, .mode, .beacon .messages {
             display: none;
         }
     }
 
     &.online {
+        .name {
+            background-color: #99CC00;
+        }
+    }
+
+    &.offline {
+        .name {
+            background-color: #FF4444;
+        }
     }
 }
 

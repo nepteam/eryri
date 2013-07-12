@@ -2,6 +2,8 @@ var BeaconMessageManager;
 
 BeaconMessageManager = function ($context) {
     this.context   = $context;
+    this.$list     = this.context.find('.messages');
+    this.$count    = this.context.find('.count');
     this.loadedMap = {};
 
     setInterval($.proxy(this.updateAllTimestamps, this), 60000);
@@ -17,6 +19,7 @@ BeaconMessageManager.prototype.onDelete = function(e) {
     var self = this,
         $button = $(e.currentTarget),
         $container = $button.closest('.message');
+
     e.preventDefault();
 
     $.ajax({
@@ -33,9 +36,10 @@ BeaconMessageManager.prototype.updateAllTimestamps = function () {
         previousTimestamp,
         previousType;
 
-    this.context.each(function (i) {
+    this.$list.each(function (i) {
         previousTimestamp = null;
         previousType      = null;
+
         $(this).children('li').each(function (j) {
             var $message  = $(this),
                 type      = $message.attr('data-type'),
@@ -77,19 +81,25 @@ BeaconMessageManager.prototype.renderOne = function (message) {
 BeaconMessageManager.prototype.load = function () {
     var self = this;
 
-    this.context.empty();
+    this.$list.empty();
 
     $.ajax({
         url: '/api/beacon',
         success: function (data) {
-            var i, message;
+            var i,
+                message,
+                unreadCount = data.meta.unread_count;
+
+            self.$count.attr('data-count', unreadCount);
+            self.$count.attr('title', unreadCount);
+            self.$count.html(unreadCount > 10 ? '*' : unreadCount);
 
             for (i in data.messages) {
                 message = data.messages[i];
 
                 self.loadedMap[message.id] = message;
 
-                self.context.append(self.renderOne(message));
+                self.$list.append(self.renderOne(message));
             }
 
             self.updateAllTimestamps();
@@ -100,11 +110,12 @@ BeaconMessageManager.prototype.load = function () {
 $(document).ready(function () {
     var notifier  = new Notifier('Beacon'),
         $user = $('.user');
-        bmm = new BeaconMessageManager($('.beacon.messages')),
+        bmm = new BeaconMessageManager($('.beacon')),
         ws = new WebSocket(wsUrl);
 
     ws.onopen = function (event) {
         $user.addClass('online');
+        $user.removeClass('offline');
     };
 
     ws.onmessage = function (event) {
@@ -118,6 +129,7 @@ $(document).ready(function () {
 
     ws.onclose = function (event) {
         $user.removeClass('online');
+        $user.addClass('offline');
     };
 
     // Initialization

@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
-{% block htitle %}Management - {{ super() }}{% endblock %}
+{% block htitle %}{{ super() }}{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="/css/management.base.css"/>
+<link rel="stylesheet" href="/css/beacon.css"/>
+<link rel="stylesheet" href="/css/layout.css"/>
 {% endblock %}
 {% block content %}
 <div class="row-fluid">
@@ -12,7 +13,7 @@
         </article>
     </div>
 </div>
-<article class="user">
+<article class="user stand-by">
     <div class="avatar"><img src="{{ nep.user.gravatar() }}?s=320" title="{{ nep.user.name }}"/></div>
     <div class="name">{{ nep.user.name }}</div>
     <nav class="mode">
@@ -20,10 +21,19 @@
             <li><a href="/logout">Log Out</a></li>
         </ul>
     </nav>
-    <ul class="beacon messages"></ul>
+    <div class="beacon">
+        <div class="count"></div>
+        <ul class="messages"></ul>
+    </div>
     <a class="hide-button" title="Hide the user card">→</a>
 </article>
 {% endblock %}
 {% block js %}
-{{ super() }}
+<script>wsUrl = 'ws://{{ nep.request.host }}/ws/beacon';</script>
+<script src="/js/beacon.js"></script>
+<script>
+    $(document).ready(function () {
+        var uc = new UserCard();
+    });
+</script>
 {% endblock %}

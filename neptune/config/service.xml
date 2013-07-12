@@ -21,7 +21,7 @@
     </entity>
     -->
     <entity id="pika.connection_parameters" class="pika.connection.URLParameters">
-        <param name="url" type="str">amqp://guest:guest@localhost:5672/%2f</param>
+        <param name="url" type="str">amqp://guest:guest@localhost:5672/%2f?heartbeat_interval=15</param>
         <!--
         <param name="host" type="str">localhost</param>
         <param name="credentials" type="entity">pika.connection_credential</param>

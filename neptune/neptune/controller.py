@@ -14,4 +14,4 @@ class Dashboard(Controller):
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/')
     def get(self):
         #self.render('dashboard.html')
-        self.redirect('/management/beacon')
+        self.redirect('/beacon')

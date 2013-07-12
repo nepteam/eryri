@@ -1,11 +1,12 @@
-{% extends 'management/base.html' %}
+{% extends 'authenticated-layout.html' %}
 {% block css %}
-<link rel="stylesheet" href="/css/management.beacon.css"/>
 {{ super() }}
 {% endblock %}
 {% block primary_title %}Beacon{% endblock %}
 {% block primary_content %}
-<ul class="beacon messages"></ul>
+<div class="beacon">
+<ul class="messages"></ul>
+</div>
 {% endblock %}
 {% block js %}
 {{ super() }}
