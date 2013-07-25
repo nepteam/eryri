@@ -54,9 +54,16 @@
             top: 126px;
             right: 5px;
             position: absolute;
+            
+            &[data-count="0"] {
+                display: none;
+            }
         }
 
         .messages {
+            border-top: 1px solid #ccc;
+            overflow: auto;
+            background-color: #eee;
             font-size: 12px;
 
             li .btn.delete {

@@ -92,7 +92,7 @@ BeaconMessageManager.prototype.load = function () {
 
             self.$count.attr('data-count', unreadCount);
             self.$count.attr('title', unreadCount);
-            self.$count.html(unreadCount > 10 ? '*' : unreadCount);
+            self.$count.html(unreadCount > 10 ? '✻' : unreadCount);
 
             for (i in data.messages) {
                 message = data.messages[i];
@@ -107,7 +107,7 @@ BeaconMessageManager.prototype.load = function () {
     });
 };
 
-$(document).ready(function () {
+BeaconMessageManager.prototype.listen = function (caller) {
     var notifier  = new Notifier('Beacon'),
         $user = $('.user');
         bmm = new BeaconMessageManager($('.beacon')),
@@ -134,4 +134,6 @@ $(document).ready(function () {
 
     // Initialization
     bmm.load();
-});
+
+    caller.beacon = bmm;
+};

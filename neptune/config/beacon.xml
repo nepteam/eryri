@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <routes>
+        <controller
+            class="neptune.beacon.controller.Beacon"
+            pattern="/beacon"
+        />
+        <controller
+            class="neptune.beacon.controller.BeaconAPI"
+            pattern="/api/beacon/?"
+        />
+        <controller
+            class="neptune.beacon.controller.BeaconAPI"
+            pattern="/api/beacon/*"
+            regexp="false"
+        />
+        <controller
+            class="neptune.beacon.controller.BeaconSocket"
+            pattern="/ws/beacon"
+        />
+    </routes>
+</application>

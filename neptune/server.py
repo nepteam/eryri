@@ -1,22 +1,41 @@
 # -*- coding: utf-8 -*-
 import threading
+from imagination.loader import Loader
 from tori.application import Application
-from tori.centre      import services
+from tori.centre      import settings, services
 
+def load_default_config():
+    """ Prototype code for loading the default configuration from the module.
+    """
+    global settings
+
+    settings['modules'] = [
+        'neptune.security',
+        'neptune.management',
+        'neptune.beacon'
+    ]
+
+    settings['roles'] = {}
+
+    for module_path in settings['modules']:
+        config = Loader(module_path).package
+        settings['roles'].update(config.roles)
+
+# Setup
 application = Application('config/app.xml')
+load_default_config()
 
+# Initiate the service
 application.start()
 
-thread_feedback = '\r{}\tForce stop "{}"'
+# Kill all running threads.
 for thread in threading.enumerate():
-    if thread.isAlive():
-        thread_name = str(thread.getName())
+    if not thread.isAlive():
+        continue
 
-        if thread_name == 'MainThread':
-            continue
+    thread_name = str(thread.getName())
 
-        try:
-            thread._Thread__stop()
-            print(thread_feedback.format('Okay', thread_name))
-        except:
-            print(thread_feedback.format('Failed', thread_name))
+    if thread_name == 'MainThread': continue
+
+    try:    thread._Thread__stop()
+    except: pass

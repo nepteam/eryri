@@ -1,0 +1,40 @@
+{% extends 'authenticated-layout.html' %}
+
+{% block css %}
+{{ super() }}
+{% endblock %}
+
+{% block primary_title %}Users{% endblock %}
+
+{% block primary_content %}
+<div class="row-fluid">
+    <nav class="span8 user-list">
+        <ul>
+            {% for user in users %}
+                <li>
+                    <span class="name">{{ user.name }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <article class="span4">
+        <h2>{{ users.0.alias }}</h2>
+        <dl>
+            <dt>Name</dt>
+            <dd>{{ users.0.name }}</dd>
+            <dt>E-mail Address</dt>
+            <dd>{{ users.0.login }}</dd>
+            <dt>Roles</dt>
+            <dd>
+                {% for role in users.0.roles %}
+                    <span>{{ role }}</span>
+                {% endfor %}
+            </dd>
+        </dl>
+    </article>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+{% endblock %}

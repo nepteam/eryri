@@ -10,9 +10,12 @@ from neptune.security.decorator import access_control, restricted_to_xhr_only
 from neptune.security.model import Credential, WebAccessMode
 
 class Beacon(Controller):
+    @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS)
     def get(self):
         self.render('beacon/beacon.html')
 
+    @restricted_to_xhr_only
+    @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS)
     def put(self):
         """ Form marking all messages as read.
         """
@@ -22,7 +25,7 @@ class Beacon(Controller):
         criteria       = collection.new_criteria()
 
         criteria.where('owner', self.user.id)
-        criteria.where('is_read', false)
+        criteria.where('is_read', False)
         criteria.order('created', pymongo.DESCENDING)
 
         for message in collection.find(criteria):
@@ -60,7 +63,7 @@ class BeaconAPI(RestController):
     serializer = Serializer()
 
     @restricted_to_xhr_only
-    @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/login')
+    @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS)
     def list(self):
         accepted_at = time.time()
         limit = int(self.get_argument('limit', None) or 25)
@@ -71,7 +74,7 @@ class BeaconAPI(RestController):
 
         recent_criteria = self.__create_basic_criteria(collection, self.user)
         recent_criteria.limit(limit)
-        
+
         total_count_criteria  = self.__create_basic_criteria(collection, self.user)
         unread_count_criteria = self.__create_basic_criteria(collection, self.user)
         unread_count_criteria.where('is_read', False)
@@ -160,6 +163,8 @@ class BeaconAPI(RestController):
 
         self.set_status(200)
 
+    @restricted_to_xhr_only
+    @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS)
     def remove(self, id):
         oid = bson.ObjectId(id)
 

@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
-    <!-- include from other configuration files -->
-    <include src="base.xml"/>
-    <include src="beacon.xml"/>
-    <include src="management.xml"/>
-    <include src="resource.xml"/>
-    <server>
-        <debug>true</debug>
-        <port>8000</port>
-    </server>
     <routes>
         <resource
             pattern="/vf/**"
@@ -41,6 +32,4 @@
             cache="false"
         />
     </routes>
-    <service>command.xml</service>
-    <service>service.xml</service>
 </application>
