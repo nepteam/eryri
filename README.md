@@ -14,6 +14,11 @@ Prerequisite
 Setup
 -----
 
-```
-pip install pika redis pymongo tornado tori jinja2 imagination kotoba
-```
+1. Check out the deployment script from `git@github.com:nepteam/automation.git`.
+2. Install all initial dependencies with `make init_debian` or `make init_fedora`.
+3. Run `puppet apply --verbose nep-core.pp`.
+
+Start the service
+-----------------
+
+Just run `python server.py`
