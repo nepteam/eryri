@@ -1,7 +1,7 @@
-nep
-===
+Eryri
+=====
 
-Nameless Education Platform
+Eryri (e-rer-ri) Education Platform
 
 Prerequisite
 ------------
@@ -15,10 +15,10 @@ Setup
 -----
 
 1. Check out the deployment script from `git@github.com:nepteam/automation.git`.
-2. Install all initial dependencies with `make init_debian` or `make init_fedora`.
+2. Install all initial dependencies with `make init_debian` or `make init_fedora` from the root of EEP **Automation** Project.
 3. Run `puppet apply --verbose nep-core.pp`.
 
 Start the service
 -----------------
 
-Just run `python server.py`
+Just run `python server.py` from `eryri/`.
