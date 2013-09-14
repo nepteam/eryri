@@ -1,5 +1,8 @@
+@import '_theme';
+
 @mixin header {
-    font-weight: 200;
+    font-weight: 300;
+    text-transform: uppercase;
 }
 
 body {
@@ -27,3 +30,4 @@ input, button, .btn {
     padding: 0;
     margin: 0 10px 0 0;
 }
+

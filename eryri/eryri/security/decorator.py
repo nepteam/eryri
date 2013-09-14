@@ -1,5 +1,5 @@
 from tornado.web import HTTPError
-from neptune.security.model import WebAccessMode
+from eryri.security.model import WebAccessMode
 
 def restricted_to_xhr_only(reference):
     def new_method(self, *args, **kwargs):

@@ -20,7 +20,7 @@ class User(object):
     def gravatar(self):
         return 'http://www.gravatar.com/avatar/{}'.format(md5(self.email).hexdigest())
 
-@entity
+@entity('security.credential')
 class Credential(object):
     def __init__(self, alias, login, password, salt, name, roles=[]):
         self.alias = alias

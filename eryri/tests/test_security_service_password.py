@@ -1,5 +1,5 @@
 import unittest as t
-from neptune.security.service import PasswordService
+from eryri.security.service import PasswordService
 
 class TestCase(t.TestCase):
     def setUp(self):

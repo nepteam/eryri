@@ -7,14 +7,14 @@
         <!-- <error>app.web.controller.ErrorController</error> -->
     </server>
     <routes>
-        <controller class="neptune.controller.Home" pattern="/"/>
-        <controller class="neptune.controller.Dashboard" pattern="/dashboard"/>
+        <controller class="eryri.controller.Home" pattern="/"/>
+        <controller class="eryri.controller.Dashboard" pattern="/dashboard"/>
         <controller
-            class="neptune.security.controller.Authentication"
+            class="eryri.security.controller.Authentication"
             pattern="/login"
         />
         <controller
-            class="neptune.security.controller.Deauthentication"
+            class="eryri.security.controller.Deauthentication"
             pattern="/logout"
         />
     </routes>

@@ -3,17 +3,17 @@
     <entity id="session" class="tori.session.repository.xredis.Redis"/>
     
     <entity id="db" class="tori.db.manager.Manager">
-        <param name="name" type="str">neptune</param>
+        <param name="name" type="str">eryri</param>
     </entity>
     
-    <entity id="service.password" class="neptune.security.service.PasswordService"/>
+    <entity id="service.password" class="eryri.security.service.PasswordService"/>
 
     <!-- management/service/AMQP -->
     <entity id="pika.connection_parameters" class="pika.connection.URLParameters">
         <param name="url" type="str">amqp://guest:guest@localhost:5672/%2f?heartbeat_interval=15</param>
     </entity>
     
-    <entity id="amqp" class="neptune.management.service.AMQPManager">
+    <entity id="amqp" class="eryri.management.service.AMQPManager">
         <param name="parameters" type="entity">pika.connection_parameters</param>
         <param name="default_queue" type="str">central_beacon</param>
         <param name="default_queue_options" type="dict">

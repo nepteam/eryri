@@ -1,5 +1,5 @@
-from neptune.common import Controller
-from neptune.security.model import Credential
+from eryri.common import Controller
+from eryri.security.model import Credential
 
 class User(Controller):
     def get(self):

@@ -1,6 +1,6 @@
-from neptune.common             import Controller
-from neptune.security.model     import Credential, WebAccessMode, User
-from neptune.security.decorator import access_control
+from eryri.common             import Controller
+from eryri.security.model     import Credential, WebAccessMode, User
+from eryri.security.decorator import access_control
 
 class Deauthentication(Controller):
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS, relay_point='/login')

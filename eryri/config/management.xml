@@ -2,7 +2,7 @@
 <application>
     <routes>
         <controller
-            class="neptune.management.controller.User"
+            class="eryri.management.controller.User"
             pattern="/management/user"
         />
     </routes>

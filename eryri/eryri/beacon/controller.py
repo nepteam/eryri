@@ -4,10 +4,10 @@ import pika
 import pymongo
 import time
 from tori.db.common import Serializer
-from neptune.common import Controller, WebSocket, RestController
-from neptune.beacon.model import BeaconMessage
-from neptune.security.decorator import access_control, restricted_to_xhr_only
-from neptune.security.model import Credential, WebAccessMode
+from eryri.common import Controller, WebSocket, RestController
+from eryri.beacon.model import BeaconMessage
+from eryri.security.decorator import access_control, restricted_to_xhr_only
+from eryri.security.model import Credential, WebAccessMode
 
 class Beacon(Controller):
     @access_control(WebAccessMode.ANY_AUTHENTICATED_ACCESS)

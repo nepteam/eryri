@@ -14,17 +14,17 @@ class Message(object):
 
 @link(
     mapped_by='sender',
-    target='neptune.security.model.Credential',
+    target='eryri.security.model.Credential',
     association=AssociationType.MANY_TO_ONE,
     read_only=True
 )
 @link(
     mapped_by='owner',
-    target='neptune.security.model.Credential',
+    target='eryri.security.model.Credential',
     association=AssociationType.MANY_TO_ONE,
     read_only=True
 )
-@entity('beacon_message')
+@entity('beacon.message')
 class BeaconMessage(Message):
     def __init__(self, sender, owner, body, kind, created=None, is_read=False):
         super(BeaconMessage, self).__init__(sender, owner, '', body, kind, created, is_read)

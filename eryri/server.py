@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+from logging import ERROR, WARNING, DEBUG, INFO
 import threading
+from sys import argv
+
 from imagination.loader import Loader
 from tori.application import Application
 from tori.centre      import settings, services
+from tori.common      import LoggerFactory
 
 def load_default_config():
     """ Prototype code for loading the default configuration from the module.
@@ -10,9 +14,9 @@ def load_default_config():
     global settings
 
     settings['modules'] = [
-        'neptune.security',
-        'neptune.management',
-        'neptune.beacon'
+        'eryri.security',
+        'eryri.management',
+        'eryri.beacon'
     ]
 
     settings['roles'] = {}
@@ -20,6 +24,8 @@ def load_default_config():
     for module_path in settings['modules']:
         config = Loader(module_path).package
         settings['roles'].update(config.roles)
+
+LoggerFactory.instance().set_default_level(INFO if '--dev' in argv else ERROR)
 
 # Setup
 application = Application('config/app.xml')

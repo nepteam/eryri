@@ -3,7 +3,7 @@ from tori.controller           import RestController as BaseRestController
 from tori.decorator.controller import renderer
 from tori.socket.websocket     import WebSocket as BaseWebSocket
 
-@renderer('neptune.view')
+@renderer('eryri.view')
 class Controller(BaseController):
     @property
     def user(self):
@@ -19,7 +19,7 @@ class Controller(BaseController):
 
         self.write(self.render_template(template_name, **contexts))
 
-@renderer('neptune.view')
+@renderer('eryri.view')
 class RestController(BaseRestController):
     @property
     def user(self):

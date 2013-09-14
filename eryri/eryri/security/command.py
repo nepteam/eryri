@@ -1,4 +1,4 @@
-from neptune.security.model import Credential
+from eryri.security.model import Credential
 
 class UserCreator(object):
     """ Command to create a new user
