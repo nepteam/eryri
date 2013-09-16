@@ -32,3 +32,6 @@ class Credential(object):
 
     def api_token(self):
         return sha1('{}{}'.format(self.salt, self.alias)).hexdigest()
+
+    def gravatar(self):
+        return 'http://www.gravatar.com/avatar/{}'.format(md5(self.login).hexdigest())

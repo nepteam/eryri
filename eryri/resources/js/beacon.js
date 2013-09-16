@@ -109,7 +109,7 @@ BeaconMessageManager.prototype.load = function () {
 
 BeaconMessageManager.prototype.listen = function (caller) {
     var notifier  = new Notifier('Beacon'),
-        $user = $('.user');
+        $user = $('.hud.user');
         bmm = new BeaconMessageManager($('.beacon')),
         ws = new WebSocket(wsUrl);
 

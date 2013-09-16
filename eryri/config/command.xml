@@ -17,4 +17,13 @@
         <interception before="me" do="execute" with="init"/>
         <interception after="me" do="execute" with="clean_up"/>
     </entity>
+    <entity
+        id="command.user.rgenerate"
+        class="eryri.security.command.RandomUserCreator"
+        tags="command command:user.rgenerate">
+        <param name="db" type="entity">db</param>
+        <param name="password_service" type="entity">service.password</param>
+        <interception before="me" do="execute" with="init"/>
+        <interception after="me" do="execute" with="clean_up"/>
+    </entity>
 </imagination>

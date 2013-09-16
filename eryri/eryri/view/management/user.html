@@ -2,39 +2,22 @@
 
 {% block css %}
 {{ super() }}
+<link rel="stylesheet" type="text/css" href="/css/management.user.css"/>
 {% endblock %}
-
-{% block primary_title %}Users{% endblock %}
 
 {% block primary_content %}
 <div class="row-fluid">
-    <nav class="span8 user-list">
-        <ul>
-            {% for user in users %}
-                <li>
-                    <span class="name">{{ user.name }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </nav>
-    <article class="span4">
-        <h2>{{ users.0.alias }}</h2>
-        <dl>
-            <dt>Name</dt>
-            <dd>{{ users.0.name }}</dd>
-            <dt>E-mail Address</dt>
-            <dd>{{ users.0.login }}</dd>
-            <dt>Roles</dt>
-            <dd>
-                {% for role in users.0.roles %}
-                    <span>{{ role }}</span>
-                {% endfor %}
-            </dd>
-        </dl>
-    </article>
+    <div class="span12 user-list">
+        <h1 data-user-query>Users</h1>
+        <form class="user management search">
+            <input name="query" type="text" class="input-block-level" placeholder="type to start searching."/>
+        </form>
+        <ul class="user management list"></ul>
+    </div>
 </div>
 {% endblock %}
 
 {% block js %}
 {{ super() }}
+<script src="/js/management.user.js"></script>
 {% endblock %}

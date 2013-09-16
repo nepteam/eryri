@@ -8,30 +8,16 @@
 <div class="row-fluid">
     <div class="span12">
         <article class="primary">
-            <h1>{% block primary_title %}Management{% endblock %}</h1>
             {% block primary_content %}{% endblock %}
         </article>
     </div>
 </div>
-<article class="user stand-by">
-    <div class="avatar"><img src="{{ nep.user.gravatar() }}?s=320" title="{{ nep.user.name }}"/></div>
-    <div class="name">{{ nep.user.name }}</div>
-    <nav class="mode">
-        <ul class="nav nav-pills nav-stacked">
-            <li><a href="/beacon">Manage beacon messages</a></li>
-            <li><a href="/logout">Log Out</a></li>
-        </ul>
-    </nav>
-    <div class="beacon">
-        <div class="count"></div>
-        <ul class="messages"></ul>
-    </div>
-    <a class="hide-button" title="Hide the user card">→</a>
-</article>
+{% include 'hud.user.html' %}
 {% endblock %}
 {% block js %}
 <script>wsUrl = 'ws://{{ nep.request.host }}/ws/beacon';</script>
 <script src="/js/beacon.js"></script>
+<script src="/js/hud.js"></script>
 <script>
     $(document).ready(function () {
         var uc = new UserCard();

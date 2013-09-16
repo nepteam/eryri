@@ -10,11 +10,17 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <div class="container-fluid">
+    <nav class="navi main navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <a class="brand" href="/">Eryri</a>
+        </div>
+    </nav>
+    <article class="container-fluid">
     {% block content %}{% endblock %}
-    </div>
+    </article>
     <script src="/js/jquery.js"></script>
     <script src="/js/common.js"></script>
+    <script src="/js/notifier.js"></script>
     <script src="/vb/js/bootstrap.min.js"></script>
     {% block js %}{% endblock %}
 </body>

@@ -1,0 +1,64 @@
+[data-user-query] {
+    &[data-user-query=""]:after {
+        content: "";
+    }
+
+    &:after {
+        content: " / " attr(data-user-query);
+        color: #ccc;
+    }
+}
+
+form.user.management.search {
+    [name="query"] {
+        border: none;
+        border-bottom: 2px solid #ddd;
+        box-shadow: none;
+
+        &:hover {
+            border-bottom-color: #33B5E5;
+        }
+
+        &:focus {
+            border-bottom-color: #0099CC;
+        }
+    }
+}
+
+ul.user.management.list {
+    list-style: none;
+    margin-left: 0;
+    overflow: hidden;
+
+    li {
+        float: left;
+        position: relative;
+        width: 260px;
+        background-color: #fff;
+        padding: 10px;
+        margin: 0 10px 10px 0;
+        border: 1px solid #ccc;
+
+        .avatar {
+            margin-right: 20px;
+            img {
+                border-radius: 100px;
+            }
+        }
+
+        .name {
+            position: absolute;
+            left: 100px;
+            right: 10px;
+            bottom: 52%;
+            font-size: 16px;
+        }
+        
+        .roles {
+            position: absolute;
+            left: 100px;
+            right: 10px;
+            top: 52%;
+        }
+    }
+}
