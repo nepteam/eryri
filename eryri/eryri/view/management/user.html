@@ -9,15 +9,31 @@
 <div class="row-fluid">
     <div class="span12 user-list">
         <h1 data-user-query>Users</h1>
-        <form class="user management search">
+        <form class="user management search" autocomplete="off">
             <input name="query" type="text" class="input-block-level" placeholder="type to start searching."/>
         </form>
         <ul class="user management list"></ul>
+    </div>
+    <div class="span9 hidden user-info">
+        <form class="user management edit" autocomplete="off">
+            <img class="avatar"/>
+            <h2></h2>
+            <h3>Profile</h3>
+            <p><input name="name" type="text" class="input-block-level" placeholder="full name"/></p>
+            <p><input name="alias" type="text" class="input-block-level" placeholder="alias / nick name"/></p>
+            <h3>Change the password</h3>
+            <p><input name="password" type="password" class="input-block-level" placeholder="type here for change your password"/></p>
+            <p class="form-action">
+                <button class="btn btn-primary">Update</button>
+            </p>
+        </article>
     </div>
 </div>
 {% endblock %}
 
 {% block js %}
 {{ super() }}
+<script src="/js/user.rpc.js"></script>
+<script src="/js/user.list.js"></script>
 <script src="/js/management.user.js"></script>
 {% endblock %}

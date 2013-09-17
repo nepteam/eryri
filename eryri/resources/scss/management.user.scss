@@ -31,7 +31,6 @@ ul.user.management.list {
     overflow: hidden;
 
     li {
-        float: left;
         position: relative;
         width: 260px;
         background-color: #fff;
@@ -41,24 +40,55 @@ ul.user.management.list {
 
         .avatar {
             margin-right: 20px;
+
             img {
+                height: 60px;
                 border-radius: 100px;
             }
         }
 
         .name {
             position: absolute;
-            left: 100px;
+            left: 80px;
             right: 10px;
             bottom: 52%;
             font-size: 16px;
         }
-        
+
         .roles {
             position: absolute;
-            left: 100px;
+            left: 80px;
             right: 10px;
             top: 52%;
+        }
+    }
+}
+
+form.user.management.edit {
+    .avatar {
+        float: right;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 20px;
+        min-height: 0;
+        height: auto;
+        line-height: 1em;
+    }
+}
+
+.user-list.span3 {
+    ul.user.management.list {
+        li {
+            float: none;
+            width: auto;
+            margin-right: 0;
+
+            &.active {
+                border-color: #0099CC;
+                background-color: #0099CC;
+                color: #fff;
+            }
         }
     }
 }

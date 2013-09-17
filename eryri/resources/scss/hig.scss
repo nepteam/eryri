@@ -5,15 +5,13 @@
     text-transform: uppercase;
 }
 
-body {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-}
-
 h1, h2 {
     @include header;
 }
 
 input, button, .btn {
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 300;
     border-radius: 0 !important;
 }
 
