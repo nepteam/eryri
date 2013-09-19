@@ -3,7 +3,7 @@ $(document).ready(function () {
         $queryForm     = $('form.user.management.search'),
         $queryInput    = $queryForm.find('[name="query"]'),
         $userList      = $('ul.user.management.list'),
-        $userPane      = $('form.user.management.edit'),
+        $userPane      = $('.user.management.edit'),
         previousQuery  = null,
         userRpcService = new UserRpcService(window.location.href),
         userList       = new UserList($userList);
