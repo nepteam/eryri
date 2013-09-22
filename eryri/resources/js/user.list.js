@@ -12,6 +12,10 @@ UserList.prototype.add = function (user) {
         ].join('')),
         role;
 
+    if (user.gravatar === null) {
+        $block.find('.avatar').remove();
+    }
+
     $block.attr('data-user-id', user.id);
     $block.find('.avatar img').attr('src', user.gravatar);
     $block.find('.name').text(user.name);
@@ -19,7 +23,7 @@ UserList.prototype.add = function (user) {
     for (index in user.roles) {
         role = user.roles[index];
 
-        $block.find('.roles').append('<span class="role label label-inverse">' + role + '</span>');
+        $block.find('.roles').append('<span class="role label" data-role="' + role + '">' + role + '</span>');
     }
 
     this.context.append($block);

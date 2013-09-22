@@ -24,8 +24,27 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 200;
 }
 
+input[type="text"], input[type="password"] {
+    border: none;
+    border-bottom: 2px solid #ddd;
+    box-shadow: none !important;
+    
+    &:hover {
+        border-bottom-color: #33B5E5;
+    }
+
+    &:focus {
+        border-bottom-color: #0099CC;
+    }
+}
+
 .label {
-    font-weight: 200;
+    text-shadow: none;
+    font-weight: 300;
+}
+
+.btn-primary {
+    background-image: none;
 }
 
 .navi.main {

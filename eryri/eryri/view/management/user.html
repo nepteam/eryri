@@ -14,27 +14,24 @@
         </form>
         <ul class="user management list"></ul>
     </div>
-    <div class="span9 hidden user-info">
-        <article class="container-fluid user management edit">
-            <div class="span3">
-                <img class="avatar"/>
-            </div>
-            <div class="span9">
-                <form autocomplete="off">
-                    <h2></h2>
-                    <h3>Profile</h3>
-                    <p><input name="name" type="text" class="input-block-level" placeholder="full name"/></p>
-                    <p><input name="alias" type="text" class="input-block-level" placeholder="alias / nick name"/></p>
-                    <h3>Change the password</h3>
-                    <p><input name="password" type="password" class="input-block-level" placeholder="type here for change your password"/></p>
-                    <p class="form-action">
-                        <button class="btn btn-primary">Update</button>
-                    </p>
-                </form>
-            </div>
-        </article>
-    </div>
 </div>
+<article class="disabled user management pane">
+    <a class="close">&times;</a>
+    <h2></h2>
+    <img class="avatar"/>
+    <form autocomplete="off" data-fields="identity">
+        <p><input name="name" type="text" class="input-block-level" placeholder="full name"/></p>
+        <p class="form-action">
+            <button class="btn btn-primary">Update profile</button>
+        </p>
+    </form>
+    <form autocomplete="off" data-fields="password">
+        <p><input name="password" type="password" class="input-block-level" placeholder="type here for change your password"/></p>
+        <p class="form-action">
+            <button class="btn btn-primary">Change the password</button>
+        </p>
+    </form>
+</article>
 {% endblock %}
 
 {% block js %}

@@ -10,7 +10,10 @@
 }
 
 form.user.management.search {
+    margin-bottom: 0;
+
     [name="query"] {
+        margin-bottom: 0;
         border: none;
         border-bottom: 2px solid #ddd;
         box-shadow: none;
@@ -28,67 +31,66 @@ form.user.management.search {
 ul.user.management.list {
     list-style: none;
     margin-left: 0;
-    overflow: hidden;
 
     li {
         position: relative;
-        width: 260px;
-        background-color: #fff;
+        cursor: pointer;
+        background-color: #0099CC;
         padding: 10px;
-        margin: 0 10px 10px 0;
-        border: 1px solid #ccc;
-
-        .avatar {
-            margin-right: 20px;
-
-            img {
-                height: 60px;
-                border-radius: 100px;
-            }
-        }
+        border-top: 1px dashed #33B5E5;
 
         .name {
-            position: absolute;
-            left: 80px;
-            right: 10px;
-            bottom: 52%;
+            color: #fff;
+            display: block;
             font-size: 16px;
         }
 
         .roles {
             position: absolute;
-            left: 80px;
-            right: 10px;
-            top: 52%;
-        }
-    }
-}
+            top: 10px;
+            right: -5px;
 
-form.user.management.edit {
-    .avatar {
-        float: right;
-    }
+            .role {
+                background-color: #666;
 
-    input[type="text"], input[type="password"] {
-        font-size: 20px;
-        min-height: 0;
-        height: auto;
-        line-height: 1em;
-    }
-}
-
-.user-list.span3 {
-    ul.user.management.list {
-        li {
-            float: none;
-            width: auto;
-            margin-right: 0;
-
-            &.active {
-                border-color: #0099CC;
-                background-color: #0099CC;
-                color: #fff;
+                &[data-role="master"], &[data-role="admin"] {
+                    color: #000;
+                    background-color: #FF8800;
+                }
             }
         }
+    }
+}
+
+.user.management.pane {
+    -webkit-transition: all 750ms ease;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 0;
+    background-color: white;
+    overflow: auto;
+    border-bottom: 3px solid #666;
+    padding: 20px 20px 20px 140px;
+
+    .close {
+        margin-top: -5px;
+        zoom: 2;
+    }
+
+    .avatar {
+        position: absolute;
+        left: 20px;
+        border-top-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+        border-bottom-left-radius: 50px;
+    }
+
+    &.disabled {
+        top: -100%;
+        bottom: 100%;
+        margin-top: -200px;
     }
 }

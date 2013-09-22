@@ -3,7 +3,12 @@
     <routes>
         <controller
             class="eryri.management.controller.User"
-            pattern="/management/user"
+            pattern="/management/user/{id}"
+            regexp="false"
+        />
+        <controller
+            class="eryri.management.controller.User"
+            pattern="/management/user/"
         />
     </routes>
 </application>

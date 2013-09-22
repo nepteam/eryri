@@ -1,21 +1,35 @@
 $(document).ready(function () {
     var $queryIndicator = $('[data-user-query]'),
-        $queryForm     = $('form.user.management.search'),
-        $queryInput    = $queryForm.find('[name="query"]'),
-        $userList      = $('ul.user.management.list'),
-        $userPane      = $('.user.management.edit'),
-        previousQuery  = null,
+        $queryForm  = $('form.user.management.search'),
+        $queryInput = $queryForm.find('[name="query"]'),
+        $userList   = $('ul.user.management.list'),
+        $userPane   = $('.user.management.pane'),
         userRpcService = new UserRpcService(window.location.href),
-        userList       = new UserList($userList);
+        userList       = new UserList($userList),
+        previousQuery  = null
+    ;
 
-    function handleQueryOkResponse(users) {
+    function handleQueryOkResponse(response) {
+        var users = response.users,
+            count = users.length,
+            user,
+            index;
+
+        if (previousQuery !== response.query) {
+            return;
+        }
+
         userList.reset();
 
         for (index in users) {
-            var user = users[index];
+            user = users[index];
+
+            user.gravatar = null;
 
             userList.add(user);
         }
+
+        NProgress.done();
     }
 
     function handleQuery(e) {
@@ -40,23 +54,18 @@ $(document).ready(function () {
         userRpcService.query(query, handleQueryOkResponse);
     }
 
-    $queryForm.on('submit', handleQuery);
-    $queryInput.on('keyup', handleQuery);
-
     function handleUserRetrivalOk(user) {
-        $userList
-            .closest('.user-list')
-            .removeClass('span12')
-            .addClass('span3');
+        var email = user.email.replace(/@/, ' at ');
 
-        $userPane
-            .closest('.user-info')
-            .removeClass('hidden');
+        $userPane.attr('data-id', user.id);
 
-        $userPane.find('h2').html(user.email.replace(/@/, ' at '));
-        $userPane.find('img.avatar').attr('src', user.gravatar);
+        $userPane.removeClass('disabled');
+
+        $userPane.find('h2').html(user.alias + ' <small>' + email + '</small>');
+        $userPane.find('img.avatar').attr('src', user.gravatar + '?s=100');
         $userPane.find('[name=name]').val(user.name);
-        $userPane.find('[name=alias]').val(user.alias);
+
+        NProgress.done();
     }
 
     function showUserPane(e) {
@@ -64,12 +73,47 @@ $(document).ready(function () {
             uid   = $self.attr('data-user-id');
 
         e.preventDefault();
-
-        $self.closest('ul').children().removeClass('active');
-        $self.addClass('active');
+        NProgress.start();
 
         userRpcService.get(uid, handleUserRetrivalOk);
     }
 
+    function onCloseButtonClickHideUserPane(e) {
+        e.preventDefault();
+        $userPane.addClass('disabled');
+    }
+
+    $queryForm.on('submit', handleQuery);
+    $queryInput.on('keyup', handleQuery);
     $userList.on('click', 'li', showUserPane);
+    $userPane.on('click', '.close', onCloseButtonClickHideUserPane);
+    $userPane.on('submit', 'form', function (e) {
+        var $form = $(this),
+            uid   = $form.closest('article').attr('data-id'),
+            data  = {};
+
+        e.preventDefault();
+
+        $form.find('input').each(function (index) {
+            var $input = $(this),
+                value  = $.trim($input.val())
+            ;
+
+            data[$input.attr('name')] = value.length > 0
+                ? value
+                : null
+            ;
+        });
+
+        userRpcService.put(uid, data, handleUserRetrivalOk);
+    });
+
+    $queryInput.val('no');
+    $queryForm.trigger('submit');
+
+    /*
+    NProgress.start();
+    userRpcService.get('5233f7cf0dc4ff06a59ba059', handleUserRetrivalOk);
+    $userPane.removeClass('disabled');
+    */
 });
