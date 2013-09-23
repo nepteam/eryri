@@ -16,8 +16,7 @@ $(document).ready(function () {
                 p: p
             },
             success: function (user) {
-                notifier.notify('Welcome to the party, ' + user.name + '.');
-                history.go(0);
+                window.location.reload(true);
             },
             statusCode: {
                 400: function () {

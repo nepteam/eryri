@@ -19,18 +19,46 @@
     <a class="close">&times;</a>
     <h2></h2>
     <img class="avatar"/>
-    <form autocomplete="off" data-fields="identity">
-        <p><input name="name" type="text" class="input-block-level" placeholder="full name"/></p>
-        <p class="form-action">
-            <button class="btn btn-primary">Update profile</button>
-        </p>
-    </form>
-    <form autocomplete="off" data-fields="password">
-        <p><input name="password" type="password" class="input-block-level" placeholder="type here for change your password"/></p>
-        <p class="form-action">
-            <button class="btn btn-primary">Change the password</button>
-        </p>
-    </form>
+    <div class="row-fluid">
+        <div class="span6">
+            <form autocomplete="off" method="put" class="form-horizontal" data-fields="identity">
+                <p><input name="name" type="text" class="input-block-level" placeholder="full name"/></p>
+                <p class="form-action">
+                    <button class="btn btn-primary">Update profile</button>
+                </p>
+            </form>
+            <form autocomplete="off" method="put" class="form-horizontal" data-fields="password">
+                <p>
+                    <input
+                        name="password"
+                        type="password"
+                        class="input-block-level"
+                        placeholder="type here for change your password"
+                        disabled="true"
+                    />
+                </p>
+                <p class="form-action">
+                    <button class="btn btn-primary" disabled="true">Change the password</button>
+                </p>
+            </form>
+        </div>
+        <div class="span6">
+            <form autocomplete="off" method="delete">
+                <p>
+                    You may activate this account. As soon as you press the button
+                    below, the account will become inaccessible and be scheduled
+                    for the initiation of the complete data deletion in 24 hours.
+                </p>
+                <p class="alert">
+                    When the account is scheduled for data deletion, the account
+                    will not become recoverable. <b>Please proceed with caution.</b>
+                </p>
+                <p class="form-action">
+                    <button class="btn btn-danger" disabled="true">Deactivate the account</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </article>
 {% endblock %}
 

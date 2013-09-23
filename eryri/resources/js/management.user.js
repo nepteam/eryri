@@ -2,10 +2,11 @@ $(document).ready(function () {
     var $queryIndicator = $('[data-user-query]'),
         $queryForm  = $('form.user.management.search'),
         $queryInput = $queryForm.find('[name="query"]'),
-        $userList   = $('ul.user.management.list'),
-        $userPane   = $('.user.management.pane'),
+        $userList = $('ul.user.management.list'),
+        $userPane = $('.user.management.pane'),
         userRpcService = new UserRpcService(window.location.href),
-        userList       = new UserList($userList),
+        userList = new UserList($userList),
+        lastQueryKeyPress = null,
         previousQuery  = null
     ;
 
@@ -49,9 +50,19 @@ $(document).ready(function () {
             return;
         }
 
-        previousQuery = query;
+        lastQueryKeyPress = new Date();
 
-        userRpcService.query(query, handleQueryOkResponse);
+        setTimeout(function () {
+            now = new Date();
+
+            if (now - lastQueryKeyPress < 400) {
+                return;
+            }
+
+            previousQuery = query;
+
+            userRpcService.query(query, handleQueryOkResponse);
+        }, 400);
     }
 
     function handleUserRetrivalOk(user) {
@@ -78,21 +89,13 @@ $(document).ready(function () {
         userRpcService.get(uid, handleUserRetrivalOk);
     }
 
-    function onCloseButtonClickHideUserPane(e) {
-        e.preventDefault();
-        $userPane.addClass('disabled');
-    }
-
-    $queryForm.on('submit', handleQuery);
-    $queryInput.on('keyup', handleQuery);
-    $userList.on('click', 'li', showUserPane);
-    $userPane.on('click', '.close', onCloseButtonClickHideUserPane);
-    $userPane.on('submit', 'form', function (e) {
+    function handleUserPaneUpdated(e) {
         var $form = $(this),
             uid   = $form.closest('article').attr('data-id'),
             data  = {};
 
         e.preventDefault();
+        NProgress.start();
 
         $form.find('input').each(function (index) {
             var $input = $(this),
@@ -106,14 +109,16 @@ $(document).ready(function () {
         });
 
         userRpcService.put(uid, data, handleUserRetrivalOk);
-    });
+    }
 
-    $queryInput.val('no');
-    $queryForm.trigger('submit');
+    function onCloseButtonClickHideUserPane(e) {
+        e.preventDefault();
+        $userPane.addClass('disabled');
+    }
 
-    /*
-    NProgress.start();
-    userRpcService.get('5233f7cf0dc4ff06a59ba059', handleUserRetrivalOk);
-    $userPane.removeClass('disabled');
-    */
+    $queryForm.on('submit', handleQuery);
+    $queryInput.on('keyup', handleQuery);
+    $userList.on('click', 'li', showUserPane);
+    $userPane.on('click', '.close', onCloseButtonClickHideUserPane);
+    $userPane.on('submit', 'form', handleUserPaneUpdated);
 });

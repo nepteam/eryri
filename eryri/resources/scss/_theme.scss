@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 200;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"] {
     border: none;
     border-bottom: 2px solid #ddd;
     box-shadow: none !important;
@@ -43,8 +43,9 @@ input[type="text"], input[type="password"] {
     font-weight: 300;
 }
 
-.btn-primary {
-    background-image: none;
+.btn {
+    background-image: none !important;
+    border-width: 2px;
 }
 
 .navi.main {

@@ -4,6 +4,9 @@
     <nav class="mode">
         <ul class="nav nav-pills nav-stacked">
             <li><a href="/beacon">Manage beacon messages</a></li>
+            {% if 'master' in nep.user.roles %}
+            <li><a href="/management/user/">Manage users</a></li>
+            {% endif %}
             <li><a href="/logout">Log Out</a></li>
         </ul>
     </nav>
